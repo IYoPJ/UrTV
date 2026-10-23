@@ -27,21 +27,11 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      # the signing key lives only in the repository's secrets (made once with .github/tools/make_signing_key.py)
-      - name: Signing key
-        env:
-          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        run: |
-          if [ -z "$KEYSTORE_B64" ] || [ -z "$KEYSTORE_PASSWORD" ]; then
-            echo "::error::ANDROID_KEYSTORE_B64 and ANDROID_KEYSTORE_PASSWORD must both be in the repository's secrets"; exit 1
-          fi
-          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.p12"
-          echo "ANDROID_KEYSTORE=$RUNNER_TEMP/release.p12" >> "$GITHUB_ENV"
+      # Fork builds use Android's debug signing key. This keeps the fork self-contained;
+      # the resulting APK replaces the screensaver after the existing one is removed once.
 
       - name: Build APKs
         env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           URTV_BRANCH: ${{ github.ref_name }}   # the screensaver fetches its page from the branch it was built from
         run: gradle -p android assembleRelease --no-daemon
 

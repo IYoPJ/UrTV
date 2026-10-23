@@ -352,8 +352,8 @@ const CONFIG = {
     minRating: _num('minrating', 7),
   },
   weekWindowDays: 7,
-  // minutes between background photos: #photos=5|10|15|30|60 (anything else = 30)
-  photoMinutes: (m => [5,10,15,30,60].includes(m) ? m : 30)(_num('photos', 30)),
+  // minutes between background photos: #photos=2|5|10|15|30|60 (anything else = 30)
+  photoMinutes: (m => [2,5,10,15,30,60].includes(m) ? m : 30)(_num('photos', 30)),
   // #widget=1: only the card, on a transparent page (the launcher's home screen shows it)
   widget: _Q.get('widget') === '1',
 };
@@ -1140,7 +1140,7 @@ function pixelShift(){
 
 // Background photos: the hosted set in photos/ (photos/index.json in the repo). A hosted photo is used only
 // once it has loaded; offline, or if it fails, a bundled one is shown, so the screen is never empty.
-const PHOTO_BASE = 'https://raw.githubusercontent.com/tshi-dev/UrTV/master/photos/';
+const PHOTO_BASE = 'https://raw.githubusercontent.com/IYoPJ/UrTV/master/photos/';
 let REMOTE_BGS = (()=>{ try{ return JSON.parse(localStorage.getItem('photoIndex') || '[]'); }catch(e){ return []; } })();
 
 async function loadPhotoIndex(){
